@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/spacing_medium"
+    android:paddingStart="@dimen/spacing_medium"
+    tools:context="ppt.reshi.textman.GameActivity">
+
+    <TextView
+        android:id="@+id/tv_guesses_label"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        tools:text="@string/label_guesses" />
+
+    <LinearLayout
+        android:id="@+id/ll_letters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xlarge"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_small">
+    </LinearLayout>
+   <!-- <TextView
+        android:id="@+id/tv_used_letters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="AĄBCĆDEĘFGHIJKLŁMNOÓPQRSTUVWXYZŻŹ"
+        android:layout_below="@id/ll_letters"/>-->
+
+    <TextView
+        android:id="@+id/tv_pick_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_below="@id/ll_letters"
+        android:layout_centerHorizontal="true"
+        android:labelFor="@+id/et_pick"
+        android:text="@string/label_pick"/>
+
+    <EditText
+        android:id="@+id/et_pick"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_below="@id/tv_pick_label"
+        android:layout_centerHorizontal="true"
+        android:inputType="text"
+        android:maxLength="1"
+        tools:text="A" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_pick"
+        android:layout_alignStart="@id/et_pick"
+        android:layout_alignEnd="@id/et_pick"
+        android:layout_centerHorizontal="true"
+        android:onClick="checkLetter"
+        android:text="@string/btn_check_letter" />
+</RelativeLayout>

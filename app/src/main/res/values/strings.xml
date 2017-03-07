@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">Textman</string>
+    <string name="game_letter_empty" translatable="false">_</string>
+    <string name="label_guesses">%d guesses left</string>
+    <string name="label_pick">Pick a letter!</string>
+    <string name="btn_check_letter">Check!</string>
+</resources>
