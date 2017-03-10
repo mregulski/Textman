@@ -2,6 +2,10 @@
     <string name="app_name" translatable="false">Textman</string>
     <string name="game_letter_empty" translatable="false">_</string>
     <string name="label_guesses">%d guesses left</string>
-    <string name="label_pick">Pick a letter!</string>
-    <string name="btn_check_letter">Check!</string>
+    <string name="btn_new_game">New Game</string>
+    <string name="err_io_words">Unable to load the wordlist</string>
+    <plurals name="score">
+        <item quantity="one">%d point</item>
+        <item quantity="other">%d points</item>
+    </plurals>
 </resources>

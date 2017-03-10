@@ -14,7 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_medium"
+        android:background="@drawable/lvl_guesses"
         tools:text="@string/label_guesses" />
+
+    <TextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_guesses_label"
+        android:textAlignment="textEnd"
+        android:layout_marginStart="@dimen/spacing_xlarge"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/tv_guesses_label"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_large"
+        tools:text="123456 points"
+        />
 
     <LinearLayout
         android:id="@+id/ll_letters"
@@ -42,5 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/gl_keypad"
-        android:text="Nowa gra" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/btn_new_game" />
 </RelativeLayout>

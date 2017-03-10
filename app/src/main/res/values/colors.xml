@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="letter_bg_ok">#388e3c</color>
-    <color name="letter_bg_wrong">#e53935</color>
+    <color name="colorOk">#388e3c</color>
+    <color name="colorWarning">#cc8b09</color>
+    <color name="colorError">#e53935</color>
 </resources>

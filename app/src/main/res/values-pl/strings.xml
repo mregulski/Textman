@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_guesses">Pozostało %d prób</string>
+    <string name="btn_new_game">Nowa gra</string>
+    <string name="err_io_words">Nie udało się załadować bazy słów</string>
+    <plurals name="score">
+        <item quantity="one">%d punkt</item>
+        <item quantity="few">%d punkty</item>
+        <item quantity="many">%d punktów</item>
+        <item quantity="other">%d punktów</item>
+    </plurals>
 </resources>

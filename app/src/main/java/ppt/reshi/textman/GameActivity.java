@@ -1,16 +1,13 @@
 package ppt.reshi.textman;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,23 +18,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
-    private static final int GUESSES_INITIAL = 11;
-
+    private static final int GUESSES_MAX = 10;
     private LinearLayout mLettersContainer;
     private ArrayList<TextView> mLetters;
     private TextView mGuessesCounter;
+    private TextView mScoreLabel;
     private GridLayout mKeypad;
 
     private int mWordCount;
     private Random mRng;
 
+    private boolean mInProgress;
     private int mGuessesLeft;
     private int mLettersCorrect;
+    private int mRoundScore;
+    private int mTotalScore;
+
     private CharSequence mWord;
 
 
@@ -47,16 +47,23 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         mLettersContainer = (LinearLayout) findViewById(R.id.ll_letters);
         mGuessesCounter = (TextView) findViewById(R.id.tv_guesses_label);
+        mScoreLabel = (TextView) findViewById(R.id.tv_score);
+        mScoreLabel.setText(getResources().getQuantityString(R.plurals.score, 0, 0));
         mKeypad = (GridLayout) findViewById(R.id.gl_keypad);
         findViewById(R.id.btn_new_game).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mInProgress) {
+                    mTotalScore -= 10;
+                    updateScoreLabel();
+                }
                 startNewGame();
             }
         });
         mWordCount = calculateWordCount();
         mRng = new Random();
         createKeypad();
+        mTotalScore = 0;
         startNewGame();
     }
 
@@ -73,6 +80,18 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void disableKeypad() {
+        int keyCount = mKeypad.getChildCount();
+        for (int i = 0; i < keyCount; i++) {
+            mKeypad.getChildAt(i).setEnabled(false);
+        }
+    }
+
+    private void resetKeypad() {
+        mKeypad.removeAllViews();
+        createKeypad();
+    }
+
     private char[] getAlphabet(String language) {
         if (language.equals("pl")) {
             return "AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ".toCharArray();
@@ -81,27 +100,34 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Start a fresh game
+     */
     private void startNewGame() {
         Resources res = getResources();
-        mGuessesLeft = GUESSES_INITIAL;
         mLettersCorrect = 0;
         mWord = pickRandomWord();
+        Log.d("startNewGame", "word: " + mWord);
+        mRoundScore = mWord.length() * 2;
+        mGuessesLeft = getInitialGuesses();
         mLettersContainer.removeAllViews();
         mLetters = new ArrayList<>(mWord.length());
         mGuessesCounter.setText(res.getString(R.string.label_guesses, mGuessesLeft));
+        mGuessesCounter.getBackground().setLevel(100);
         resetKeypad();
         for (int i = 0; i < mWord.length(); i++) {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") // manual attachement
             TextView letterView = (TextView) inflater.inflate(R.layout.game_letter_view, null);
             mLettersContainer.addView(letterView);
             mLetters.add(letterView);
         }
+        mInProgress = true;
     }
 
-    private void resetKeypad() {
-        mKeypad.removeAllViews();
-        createKeypad();
+    private int getInitialGuesses() {
+        int guesses = mWord.length();
+        return guesses > GUESSES_MAX ? GUESSES_MAX : guesses;
     }
 
     /**
@@ -123,38 +149,9 @@ public class GameActivity extends AppCompatActivity {
         return isCorrect;
     }
 
-    private void guessCorrect(View v) {
-        v.setBackgroundColor(getColor(R.color.letter_bg_ok));
-        if (mLettersCorrect == mWord.length()) {
-            Toast.makeText(this, "Super!", Toast.LENGTH_SHORT).show();
-//            startNewGame();
-        }
-    }
-
-    private void guessIncorect(View v) {
-        Resources res = getResources();
-        mGuessesLeft --;
-        mGuessesCounter.setText(res.getString(R.string.label_guesses, mGuessesLeft));
-        v.setBackgroundColor(getColor(R.color.letter_bg_wrong));
-        if (mGuessesLeft <= 0) {
-            // loss
-            Toast.makeText(this, "Nie udało się :(", Toast.LENGTH_SHORT).show();
-            disableKeypad();
-            revealSolution();
-
-        }
-    }
-
     private void revealSolution() {
         for (int i = 0; i < mWord.length(); i++) {
             mLetters.get(i).setText(String.valueOf(mWord.charAt(i)));
-        }
-    }
-
-    private void disableKeypad() {
-        int keyCount = mKeypad.getChildCount();
-        for (int i = 0; i < keyCount; i++) {
-            mKeypad.getChildAt(i).setEnabled(false);
         }
     }
 
@@ -171,12 +168,13 @@ public class GameActivity extends AppCompatActivity {
             words.close();
             wordsReader.close();
             wordsFile.close();
+            throw new IOException("test exception");
         } catch (IOException ioe) {
-            // TODO: deal with it
+            Toast.makeText(this, getResources().getString(R.string.err_io_words), Toast.LENGTH_SHORT).show();
+
         }
         return wordCount;
     }
-
 
     private CharSequence pickRandomWord() {
         Resources res = this.getResources();
@@ -191,7 +189,7 @@ public class GameActivity extends AppCompatActivity {
             }
             word = words.readLine();
         } catch (IOException ioe) {
-            // TODO: deal with it
+            // TODO: deal with it, if it makes sense to do so
             word = null;
         }
         return word;
@@ -203,13 +201,45 @@ public class GameActivity extends AppCompatActivity {
         public void onClick(View v) {
             Log.d("Button", "Clicked: " + ((Button) v).getText());
             v.setEnabled(false);
-
+            mRoundScore--;
             boolean isOk = checkLetter(((Button) v).getText().charAt(0));
             if (isOk) {
                 guessCorrect(v);
             } else {
-                guessIncorect(v);
+                guessIncorrect(v);
             }
         }
     }
+
+    private void guessCorrect(View v) {
+        v.setBackgroundColor(getColor(R.color.colorOk));
+        if (mLettersCorrect == mWord.length()) {
+            Toast.makeText(this, "Super!", Toast.LENGTH_SHORT).show();
+            disableKeypad();
+            mTotalScore += mRoundScore;
+            updateScoreLabel();
+            mInProgress = false;
+        }
+    }
+
+    private void guessIncorrect(View v) {
+        Resources res = getResources();
+        mGuessesLeft --;
+        mGuessesCounter.setText(res.getString(R.string.label_guesses, mGuessesLeft));
+        v.setBackgroundColor(getColor(R.color.colorError));
+        mGuessesCounter.getBackground().setLevel(mGuessesLeft*10);
+        Log.d("guessIncorrect", "new level: " + mGuessesLeft*10);
+        if (mGuessesLeft <= 0) {
+            // loss
+            Toast.makeText(this, "Nie udało się :(", Toast.LENGTH_SHORT).show();
+            disableKeypad();
+            revealSolution();
+            mInProgress = false;
+        }
+    }
+
+    private void updateScoreLabel() {
+        mScoreLabel.setText(getResources().getQuantityString(R.plurals.score, mTotalScore, mTotalScore));
+    }
+
 }
