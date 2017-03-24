@@ -9,54 +9,56 @@
     tools:context="ppt.reshi.textman.GameActivity">
 
     <TextView
-        android:id="@+id/tv_guesses_label"
-        android:textSize="15sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_medium"
-        android:background="@drawable/lvl_guesses"
-        tools:text="@string/label_guesses" />
-
-    <TextView
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/tv_guesses_label"
+
         android:textAlignment="textEnd"
         android:layout_marginStart="@dimen/spacing_xlarge"
         android:layout_alignParentEnd="true"
-        android:layout_alignBaseline="@id/tv_guesses_label"
+
         android:textStyle="bold"
         android:textSize="@dimen/text_large"
         tools:text="123456 points"
         />
 
-    <LinearLayout
-        android:id="@+id/ll_letters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_xlarge"
-        android:layout_marginBottom="@dimen/spacing_large"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:padding="@dimen/spacing_small">
-    </LinearLayout>
-
-    <GridLayout
-        android:id="@+id/gl_keypad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:columnCount="7"
-        android:rowCount="5"
-        android:layout_below="@id/ll_letters">
-    </GridLayout>
     <Button
         android:id="@+id/btn_new_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/gl_keypad"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/btn_new_game" />
+
+    <ppt.reshi.textman.Keypad
+        android:id="@+id/kp_keypad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="9"
+        android:rowCount="4"
+        android:layout_above="@+id/btn_new_game"
+        android:layout_alignParentStart="true" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_letters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/kp_keypad"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_small">
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_hangman"
+        android:layout_below="@id/tv_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_letters"
+        android:src="@drawable/lvl_guesses"
+        android:contentDescription="@string/alt_hangman_progress"
+        />
 </RelativeLayout>
