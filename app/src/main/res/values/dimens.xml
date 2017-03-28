@@ -9,6 +9,6 @@
     <dimen name="text_regular">14sp</dimen>
     <dimen name="text_large">20sp</dimen>
 
-    <dimen name="btn_letter_width">40dp</dimen>
+    <dimen name="btn_letter_width">35dp</dimen>
 
 </resources>
